@@ -28,9 +28,10 @@ class hexoRollupRenderer {
         ]
     }
 
-    //
-    // Convert config of the entry to object.
-    //
+    /**
+     * Convert config of the entry to array.
+     * @returns {Array} entry collection
+     */
     get entry() {
         const cwd = process.cwd();
         let entry = this.userConfig.entry;
@@ -39,6 +40,10 @@ class hexoRollupRenderer {
         return entry.filter(n => n.indexOf('source') !== -1).map(n => path.join(cwd, n));
     }
 
+    /**
+     * hexo user config getter
+     * @returns {Object}
+     */
     get userConfig() {
         return Object.assign({},
             this._hexo.theme.config.rollup || {},
@@ -46,6 +51,10 @@ class hexoRollupRenderer {
         );
     }
 
+    /**
+     * renderer register function getter
+     * @returns {Function}
+     */
     get renderer() {
         const self = this;
         return function(data){

@@ -2,11 +2,21 @@
   "name": "hexo-plugin-rollup",
   "version": "0.0.1",
   "main": "index.js",
+  "author": {
+    "name": "segayuu"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/segayuu/hexo-plugin-rollup"
+  },
   "dependencies": {
     "rollup": "^0.41.1",
     "rollup-plugin-commonjs": "^7.0.0",
     "rollup-plugin-multi-entry": "^2.0.1",
     "rollup-plugin-node-resolve": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=6.9.4"
   },
   "license": "MIT License"
 }
