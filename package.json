@@ -1,0 +1,12 @@
+{
+  "name": "hexo-plugin-rollup",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "rollup": "^0.41.1",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-multi-entry": "^2.0.1",
+    "rollup-plugin-node-resolve": "^2.0.0"
+  },
+  "license": "MIT License"
+}
