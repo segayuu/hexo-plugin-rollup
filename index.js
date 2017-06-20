@@ -4,12 +4,14 @@
  * Created by tumugu2 on 2016/12/15.
  */
 const { basename, dirname, join } = require('path');
+const Hexo = require('hexo');
 const HexoRollupConfig = require('./class_config');
 
 function getRenderer(hexo){
-    if (!hexo || hexo.name !== 'Hexo') {
+    if (!hexo || !(hexo instanceof Hexo)) {
         throw new Error('required argument Hexo!');
     }
+
     const bundleCallback = function(bundle){
         return bundle.generate({
             format: 'iife',
