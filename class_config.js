@@ -101,7 +101,17 @@ class HexoRollupConfig {
         this.site_plugins = getRollupPlugins([ site_js_dir ], site_include, site_plugins);
         this.theme_plugins = getRollupPlugins([ theme_js_dir ], theme_include, theme_plugins);
     }
-    isEntry(path, isSite){
+    isEntry(path){
+        const isTheme = dirname(path) === this.theme_js_dir;
+        const isSite = !isTheme && dirname(path) === this.site_js_dir;     
+
+        console.log('this.site_entry:'+this.site_entry);
+        console.log('this.theme_entry:'+this.theme_entry);
+
+        if (!(isSite || isTheme)){
+            return false;
+        }
+        console.log('indexof:'+(isSite ? this.site_entry : this.theme_entry).indexOf(path));
         return (isSite ? this.site_entry : this.theme_entry).indexOf(path) >= 0;
     }
     get(){

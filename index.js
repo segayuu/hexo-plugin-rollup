@@ -27,14 +27,13 @@ function getRenderer(hexo){
         hexo.log.warn('RollupRendererPlugin: %s', warn.message);
     }
 
-    const configObj = new HexoRollupConfig(hexo);
     function renderer(data){
+        const configObj = new HexoRollupConfig(hexo);
         const { path, text: contents } = data;
 
         const isTheme = dirname(path) === configObj.theme_js_dir;
-        const isSite = !isTheme && dirname(path) === configObj.site_js_dir;
 
-        if (!(isSite || isTheme) || !configObj.isEntry(path, isSite)){
+        if (!configObj.isEntry(path)){
             return data.text;
         }
 
