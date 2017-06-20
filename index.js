@@ -4,11 +4,10 @@
  * Created by tumugu2 on 2016/12/15.
  */
 const { basename, dirname, join } = require('path');
-const Hexo = require('hexo');
 const HexoRollupConfig = require('./class_config');
 
 function getRenderer(hexo){
-    if (!hexo || !(hexo instanceof Hexo)) {
+    if (undefined === hexo) {
         throw new Error('required argument Hexo!');
     }
 
@@ -32,8 +31,8 @@ function getRenderer(hexo){
     function renderer(data){
         const { path, text: contents } = data;
 
-        const isTheme = dirname(path) === theme_js_dir;
-        const isSite = !isTheme && dirname(path) === site_js_dir;
+        const isTheme = dirname(path) === configObj.theme_js_dir;
+        const isSite = !isTheme && dirname(path) === configObj.site_js_dir;
 
         if (!(isSite || isTheme) || !configObj.isEntry(path, isSite)){
             return data.text;

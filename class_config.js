@@ -63,19 +63,19 @@ function getRollupPlugins(paths, include, plugins){
 
 class HexoRollupConfig {
     constructor(hexo){
-        if (!hexo || hexo.name !== 'Hexo') {
+        if (!hexo) {
             throw new Error('required argument Hexo!');
         }        
 
         if (!hexo.config || !hexo.theme || !hexo.theme.config){
             throw new Error("hexo object not init!");
         }
-        this.raw_site_config = hexo.config.rollup;
-        this.raw_theme_config = hexo.theme.config.rollup;
+        this.raw_site_config = hexo.config.rollup ? hexo.config.rollup : {};
+        this.raw_theme_config = hexo.theme.config.rollup ? hexo.theme.config.rollup: {};
 
-        this.init();
+        this.init(hexo);
     }
-    init(){
+    init(hexo){
         const {
             plugins: site_plugins = {},
             entry: site_entry = [],
@@ -88,6 +88,9 @@ class HexoRollupConfig {
 
         const site_js_dir = join(hexo.source_dir, 'js');
         const theme_js_dir = join(hexo.theme_dir, 'source', 'js');
+
+        this.site_js_dir = site_js_dir;
+        this.theme_js_dir = theme_js_dir;
 
         this.site_entry = wrapArray(site_entry).map(n => join(site_js_dir, n));
         this.theme_entry = wrapArray(theme_entry).map(n => join(theme_js_dir, n));
