@@ -1,83 +1,52 @@
 'use strict';
-const rollup = require('rollup').rollup;
-const p_prefix = 'rollup-plugin-';
-const r_plugin = {
-  npm: require(p_prefix + 'node-resolve'),
-  cjs: require(p_prefix + 'commonjs'),
-  multiEntry: require(p_prefix + 'multi-entry')
-};
+/* global hexo */
+/**
+ * Created by tumugu2 on 2016/12/15.
+ */
+const { basename, dirname, join } = require('path');
+const HexoRollupConfig = require('./class_config');
 
-const path = require('path');
-
-class hexoRollupRenderer {
-  constructor(hexo) {
-    this._hexo = hexo;
-  }
-
-  static isString(str) {
-    return typeof str === 'string';
-  }
-
-  static get rollupPlugins() {
-    return [
-      r_plugin.multiEntry(),
-      r_plugin.npm({
-        browser: true
-      }),
-      r_plugin.cjs()
-    ]
-  }
-
-  /**
-   * Convert config of the entry to array.
-   * @returns {Array} entry collection
-   */
-  get entry() {
-    const cwd = process.cwd();
-    let entry = this.userConfig.entry;
-    if (hexoRollupRenderer.isString(entry)) {
-      entry = Array.of(entry);
+function getRenderer(hexo){
+    if (!hexo || hexo.name !== 'Hexo') {
+        throw new Error('required argument Hexo!');
     }
-    if (!entry) {
-      return [];
-    }
-    return entry.filter(n => n.indexOf('source') !== -1).map(
-        n => path.join(cwd, n));
-  }
-
-  /**
-   * hexo user config getter
-   * @returns {Object}
-   */
-  get userConfig() {
-    return Object.assign({},
-        this._hexo.theme.config.rollup || {},
-        this._hexo.config.rollup || {}
-    );
-  }
-
-  /**
-   * renderer register function getter
-   * @returns {Function}
-   */
-  get renderer() {
-    const self = this;
-    return function (data) {
-      if (self.entry.length === 0) {
-        return Promise.resolve(data.text);
-      }
-      const config = Object.assign({}, self.userConfig, {
-        entry: data.path,
-        plugins: hexoRollupRenderer.rollupPlugins
-      });
-      return rollup(config).then(bundle => bundle.generate({
-        format: 'iife',
-        moduleName: 'hexo_rollup'
-      }).code);
+    const bundleCallback = function(bundle){
+        return bundle.generate({
+            format: 'iife',
+            moduleName: 'hexo_rollup'
+        }).code;
     };
-  }
+
+    const errorCallback = function(err){
+        hexo.log.error('RollupRendererPlugin: %s', err.message);
+        throw new Error('RollupRenderer Error.');        
+    }
+
+    const warningCallback = function(warn){
+        hexo.log.warn('RollupRendererPlugin: %s', warn.message);
+    }
+
+    const configObj = new HexoRollupConfig(hexo);
+    function renderer(data){
+        const { path, text: contents } = data;
+
+        const isTheme = dirname(path) === theme_js_dir;
+        const isSite = !isTheme && dirname(path) === site_js_dir;
+
+        if (!(isSite || isTheme) || !configObj.isEntry(path, isSite)){
+            return data.text;
+        }
+
+        const config = Object.assign(configObj.get(), {
+            entry: { path, contents },
+            plugins: isTheme ? config.theme_plugins : config.site_plugins
+        });
+
+        config.onwarn = warningCallback;
+
+        return rollup(config).then(bundleCallback).catch(errorCallback);
+    }
+    return renderer;
 }
 
-/* globals hexo */
-const classes = new hexoRollupRenderer(hexo);
-hexo.extend.renderer.register('js', 'js', classes.renderer);
+hexo.extend.renderer.register('js', 'js', getRenderer(hexo), false);
