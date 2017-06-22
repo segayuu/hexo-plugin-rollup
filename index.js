@@ -4,6 +4,7 @@
  * Created by tumugu2 on 2016/12/15.
  */
 const { basename, dirname, join } = require('path');
+const { rollup } = require('rollup');
 const HexoRollupConfig = require('./class_config');
 
 function getRenderer(hexo){
@@ -21,26 +22,21 @@ function getRenderer(hexo){
     const errorCallback = function(err){
         hexo.log.error('RollupRendererPlugin: %s', err.message);
         throw new Error('RollupRenderer Error.');        
-    }
+    };
 
     const warningCallback = function(warn){
         hexo.log.warn('RollupRendererPlugin: %s', warn.message);
-    }
+    };
 
     function renderer(data){
         const configObj = new HexoRollupConfig(hexo);
         const { path, text: contents } = data;
 
-        const isTheme = dirname(path) === configObj.theme_js_dir;
-
         if (!configObj.isEntry(path)){
-            return data.text;
+            return contents;
         }
 
-        const config = Object.assign(configObj.get(), {
-            entry: { path, contents },
-            plugins: isTheme ? config.theme_plugins : config.site_plugins
-        });
+        const config = configObj.getConfig(data, configObj);
 
         config.onwarn = warningCallback;
 

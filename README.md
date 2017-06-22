@@ -15,6 +15,10 @@ or
 ```yaml
 rollup:
   entry:
-    - themes/my-theme/source/js/index.js
-    - themes/my-theme/source/js/lib.js
+    # site _config.yml
+    # hexo-site/source/js/
+    # theme _config.yml
+    # hexo-site/themes/my-theme/source/js/
+    - index.js
+    - lib.js
 ```
