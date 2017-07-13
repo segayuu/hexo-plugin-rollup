@@ -1,0 +1,15 @@
+[
+    "memory",
+    "includepaths",
+    "commonjs",
+    {
+        "name": "node-resolve",
+        "config": { "browser": true }
+    },
+    {
+        "name": "buble",
+        "config": {
+            "ie":11, "chrome":58, "edge":15
+        }
+    }
+]
