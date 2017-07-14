@@ -26,7 +26,7 @@ describe('utility', () => {
       const input1 = "es";
       const input2 = null;
       throws(() => {
-        func(input1, null);
+        func(input1, input2);
       });
     });
   });
