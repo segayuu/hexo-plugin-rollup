@@ -54,7 +54,7 @@ rollup:
       config:
         ie: 11
         chrome: 58
-        edge: 15      
+        edge: 15
 ```
 
 ### include
