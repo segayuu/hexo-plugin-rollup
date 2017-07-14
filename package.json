@@ -39,7 +39,7 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "lint": "eslint lib/**",
+    "lint": "eslint \"lib/**\"",
     "test": "mocha"
   },
   "license": "MIT"
