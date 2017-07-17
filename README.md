@@ -8,7 +8,7 @@ hexo plugin es module bundler.
 $ npm install hexo-plugin-rollup --save
 ```
 
-## Options
+## Using
 
 ### Entry
 
@@ -57,6 +57,21 @@ rollup:
         edge: 15
 ```
 
-### include
+### Javascript File Include
 
 Include `*.js` file in Site or Theme directory.
+e.g: `*.js` file in npm package CSS Framework.
+
+```yaml
+# _config.yml
+rollup:
+  include:
+    - ./node_modules/my-package/src/bundle.js
+    - ./node_modules/jquery/dist/jquery.js
+```
+
+#### Include file root path
+
+`_config.yml` in site directory: `hexo-site`
+
+`_config.yml` in theme directory: `hexo-site/themes/my-theme`
