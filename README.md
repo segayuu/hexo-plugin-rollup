@@ -28,13 +28,13 @@ rollup:
 
 #### entry file root path
 
-_config.yml in site directory: `hexo-site/source/js/`
+`_config.yml` in site directory: `hexo-site/source/js/`
 
-_config.yml in theme directory: `hexo-site/themes/my-theme/source/js/`
+`_config.yml` in theme directory: `hexo-site/themes/my-theme/source/js/`
 
-### Plugin
+### Rollup Plugins Import
 
-Import `rollup` plugin installed in Site or Theme directory.
+Import `rollup` plugin installed in Site directory.
 
 To configure plugins inside of a configuration file, use the `plugins` key, which contains a list of plugin names.
 
