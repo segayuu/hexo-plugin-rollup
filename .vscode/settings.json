@@ -3,7 +3,6 @@
     "eslint.options": {
         "configFile": "./.eslintrc.json"
     },
-    "mocha.files.glob": "test/**/*.js",
     "files.eol": "\n",
     "editor.tabSize": 2
   }
