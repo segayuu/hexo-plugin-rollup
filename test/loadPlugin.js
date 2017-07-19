@@ -1,8 +1,12 @@
-const { ok, throws, deepStrictEqual } = require("assert");
+const { ok, throws, deepStrictEqual, strictEqual } = require("assert");
 const tester = require("../lib/loadplugin");
 const isCallable = require("is-callable");
 
 describe('loadplugin', () => {
+  const installedPrefixPluginName = "rollup-plugin-commonjs";
+  const noInstalledPrefixPluginName = "rollup-plugin-babel";
+  const installedPluginName = "memory";
+  const noInstalledPluginName = "hogemoge-plugin";
   describe('resolveArray', () => {
     const func = tester.resolveArray;
     it('関数である', () => {
@@ -30,17 +34,75 @@ describe('loadplugin', () => {
     it('関数かどうか', () => {
       ok(isCallable(func));
     });
-    it('正常系');
-    it('見つからないとき');
-    it('引数がstringじゃない');
+    describe('正常系', () => {
+      it('prefixなし', () => {
+        const result = func(installedPluginName);
+        ok(isCallable(result));
+      });
+      it('prefixあり', () => {
+        const result = func(installedPrefixPluginName);
+        ok(isCallable(result));
+      });
+    });
+    describe('見つからないとき', () => {
+      it('prefixなし', () => {
+        const result = func(noInstalledPluginName);
+        strictEqual(result, false);
+      });
+      it('prefixあり', () => {
+        const result = func(noInstalledPrefixPluginName);
+        strictEqual(result, false);
+      });
+    });
+    it('引数がstringじゃない', () => {
+      throws(() => {
+        func();
+      });
+      throws(() => {
+        func(1);
+      });
+      throws(() => {
+        func({});
+      });
+    });
   });
   describe('load', () => {
     const func = tester.load;
     it('関数かどうか', () => {
       ok(isCallable(func));
     });
-    it('正常系');
-    it('見つからないとき');
-    it('引数がstringじゃない');
+    describe('正常系', () => {
+      it('prefixなし', () => {
+        const result = func(installedPluginName);
+        ok(isCallable(result));
+      });
+      it('prefixあり', () => {
+        const result = func(installedPrefixPluginName);
+        ok(isCallable(result));
+      });
+    });
+    describe('見つからないとき', () => {
+      it('prefixなし', () => {
+        throws(() => {
+          func(noInstalledPluginName);
+        });
+      });
+      it('prefixあり', () => {
+        throws(() => {
+          func(noInstalledPrefixPluginName);
+        });
+      });
+    });
+    it('引数がstringじゃない', () => {
+      throws(() => {
+        func();
+      });
+      throws(() => {
+        func(1);
+      });
+      throws(() => {
+        func({});
+      });
+    });
   });
 });
