@@ -3,10 +3,10 @@ const tester = require("../lib/loadplugin");
 const isCallable = require("is-callable");
 
 describe('loadplugin', () => {
-  const installedPrefixPluginName = "rollup-plugin-commonjs";
-  const noInstalledPrefixPluginName = "rollup-plugin-babel";
+  const installedPrefixPluginName = "rollup-plugin-memory";
+  const notInstalledPrefixPluginName = "rollup-plugin-hogemoge";
   const installedPluginName = "memory";
-  const noInstalledPluginName = "hogemoge-plugin";
+  const notInstalledPluginName = "hogemoge";
   describe('resolveArray', () => {
     const func = tester.resolveArray;
     it('関数である', () => {
@@ -46,24 +46,24 @@ describe('loadplugin', () => {
     });
     describe('見つからないとき', () => {
       it('prefixなし', () => {
-        const result = func(noInstalledPluginName);
+        const result = func(notInstalledPluginName);
         strictEqual(result, false);
       });
       it('prefixあり', () => {
-        const result = func(noInstalledPrefixPluginName);
+        const result = func(notInstalledPrefixPluginName);
         strictEqual(result, false);
       });
     });
     it('引数がstringじゃない', () => {
       throws(() => {
         func();
-      });
+      }, TypeError);
       throws(() => {
         func(1);
-      });
+      }, TypeError);
       throws(() => {
         func({});
-      });
+      }, TypeError);
     });
   });
   describe('load', () => {
@@ -84,25 +84,27 @@ describe('loadplugin', () => {
     describe('見つからないとき', () => {
       it('prefixなし', () => {
         throws(() => {
-          func(noInstalledPluginName);
-        });
+          func(notInstalledPluginName);
+        }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
+        );
       });
       it('prefixあり', () => {
         throws(() => {
-          func(noInstalledPrefixPluginName);
-        });
+          func(notInstalledPrefixPluginName);
+        }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
+        );
       });
     });
     it('引数がstringじゃない', () => {
       throws(() => {
         func();
-      });
+      }, TypeError);
       throws(() => {
         func(1);
-      });
+      }, TypeError);
       throws(() => {
         func({});
-      });
+      }, TypeError);
     });
   });
 });
