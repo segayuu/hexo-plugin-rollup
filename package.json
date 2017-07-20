@@ -22,7 +22,8 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-includepaths": "^0.2.2",
     "rollup-plugin-memory": "^2.0.0",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "try-require": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "^4.2.0",
