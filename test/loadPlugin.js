@@ -12,7 +12,22 @@ describe('loadplugin', () => {
     it('関数である', () => {
       ok(isCallable(func));
     });
-    it('正常系');
+    it('正常系', () => {
+      const func = tester.resolveArray;
+      const input = ["a", "b", "c"];
+      const result = func(input);
+      deepStrictEqual(result, [{
+        "name": "a",
+        "config": {}
+      },
+      {
+        "name": "b",
+        "config": {}
+      },{
+        "name": "c",
+        "config": {}
+      }]);
+    });
     it('空のとき', () => {
       const input = [];
       const result = func(input);
