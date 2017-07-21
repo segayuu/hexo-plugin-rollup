@@ -3,10 +3,9 @@ const tester = require("../lib/loadplugin");
 const isCallable = require("is-callable");
 
 describe('loadplugin', () => {
-  const installedPrefixPluginName = "rollup-plugin-memory";
-  const notInstalledPrefixPluginName = "rollup-plugin-hogemoge";
-  const installedPluginName = "memory";
-  const notInstalledPluginName = "hogemoge";
+  const plugin_plefix = "rollup-plugin-";
+  const validPluginName = "memory";
+  const invalidPluginName = "hogemoge";
   describe('resolveArray', () => {
     const func = tester.resolveArray;
     it('関数である', () => {
@@ -52,13 +51,13 @@ describe('loadplugin', () => {
     describe('正常系', () => {
       it('prefixなし', () => {
         tester.clearTryLoadErrors();
-        const result = func(installedPluginName);
+        const result = func(validPluginName);
         ok(isCallable(result));
         strictEqual(tester.tryLoadErrors.length, 0);
       });
       it('prefixあり', () => {
         tester.clearTryLoadErrors();
-        const result = func(installedPrefixPluginName);
+        const result = func(plugin_plefix + validPluginName);
         ok(isCallable(result));
         strictEqual(tester.tryLoadErrors.length, 0);
       });
@@ -66,13 +65,13 @@ describe('loadplugin', () => {
     describe('見つからないとき', () => {
       it('prefixなし', () => {
         tester.clearTryLoadErrors();
-        const result = func(notInstalledPluginName);
+        const result = func(invalidPluginName);
         strictEqual(result, false);
         strictEqual(tester.tryLoadErrors.length, 1);
       });
       it('prefixあり', () => {
         tester.clearTryLoadErrors();
-        const result = func(notInstalledPrefixPluginName);
+        const result = func(plugin_plefix + invalidPluginName);
         strictEqual(result, false);
         strictEqual(tester.tryLoadErrors.length, 1);
       });
@@ -96,24 +95,24 @@ describe('loadplugin', () => {
     });
     describe('正常系', () => {
       it('prefixなし', () => {
-        const result = func(installedPluginName);
+        const result = func(validPluginName);
         ok(isCallable(result));
       });
       it('prefixあり', () => {
-        const result = func(installedPrefixPluginName);
+        const result = func(plugin_plefix + validPluginName);
         ok(isCallable(result));
       });
     });
     describe('見つからないとき', () => {
       it('prefixなし', () => {
         throws(() => {
-          func(notInstalledPluginName);
+          func(invalidPluginName);
         }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
         );
       });
       it('prefixあり', () => {
         throws(() => {
-          func(notInstalledPrefixPluginName);
+          func(plugin_plefix + invalidPluginName);
         }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
         );
       });
