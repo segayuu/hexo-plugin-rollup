@@ -51,22 +51,30 @@ describe('loadplugin', () => {
     });
     describe('正常系', () => {
       it('prefixなし', () => {
+        tester.clearTryLoadErrors();
         const result = func(installedPluginName);
         ok(isCallable(result));
+        strictEqual(tester.tryLoadErrors.length, 0);
       });
       it('prefixあり', () => {
+        tester.clearTryLoadErrors();
         const result = func(installedPrefixPluginName);
         ok(isCallable(result));
+        strictEqual(tester.tryLoadErrors.length, 0);
       });
     });
     describe('見つからないとき', () => {
       it('prefixなし', () => {
+        tester.clearTryLoadErrors();
         const result = func(notInstalledPluginName);
         strictEqual(result, false);
+        strictEqual(tester.tryLoadErrors.length, 1);
       });
       it('prefixあり', () => {
+        tester.clearTryLoadErrors();
         const result = func(notInstalledPrefixPluginName);
         strictEqual(result, false);
+        strictEqual(tester.tryLoadErrors.length, 1);
       });
     });
     it('引数がstringじゃない', () => {
