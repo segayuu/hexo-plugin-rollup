@@ -37,18 +37,20 @@ async function HexoNewInstanceAsync(cwd = process.cwd(), args = {}) {
 describe('結合テスト諸々？', () => {
   let hexo;
   let configObj;
+  let load;
   before(async () => {
     hexo = await HexoNewInstanceAsync(__dirname);
     configObj = configFunc(hexo);
+    ({ loadConfig: load } = site.wrap(hexo));
   });
   describe('entry', () => {
     const validPath = `${__dirname}${sep}source${sep}js${sep}index.js`;
-    const load = () => site.loadConfig(hexo);
     it('undefined', () => {
       const { config } = load();
       ok(isPlainObject(config));
-      ok(Array.isArray(config.entry), `config.entry typeof ${typeof config.entry}`);
-      deepStrictEqual(config.entry, []);
+      const { entry } = config;
+      ok(Array.isArray(entry), `entry typeof ${typeof entry}`);
+      deepStrictEqual(entry, []);
       ok(!configObj.isEntry(validPath));
     });
     it('string', () => {
@@ -57,24 +59,27 @@ describe('結合テスト諸々？', () => {
       };
       const { config } = load();
       ok(isPlainObject(config));
-      ok(Array.isArray(config.entry), `config.entry typeof ${typeof config.entry}`);
-      deepStrictEqual(config.entry, [validPath]);
+      const { entry } = config;
+      ok(Array.isArray(entry), `entry typeof ${typeof entry}`);
+      deepStrictEqual(entry, [validPath]);
       ok(configObj.isEntry(validPath));
     });
     it('array', () => {
       hexo.config.rollup.entry = ["index.js"];
       const { config } = load();
       ok(isPlainObject(config));
-      ok(Array.isArray(config.entry), `config.entry typeof ${typeof config.entry}`);
-      deepStrictEqual(config.entry, [validPath]);
+      const { entry } = config;
+      ok(Array.isArray(entry), `entry typeof ${typeof entry}`);
+      deepStrictEqual(entry, [validPath]);
       ok(configObj.isEntry(validPath));
     });
     it('empty', () => {
       hexo.config.rollup.entry = null;
       const { config } = load();
       ok(isPlainObject(config));
-      ok(Array.isArray(config.entry), `config.entry typeof ${typeof config.entry}`);
-      deepStrictEqual(config.entry, []);
+      const { entry } = config;
+      ok(Array.isArray(entry), `entry typeof ${typeof entry}`);
+      deepStrictEqual(entry, []);
       ok(!configObj.isEntry(validPath));
     });
   });
