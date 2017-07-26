@@ -60,6 +60,7 @@ rollup:
 ### Javascript File Include
 
 Include `*.js` file in Site or Theme directory.
+
 e.g: `*.js` file in npm package CSS Framework.
 
 ```yaml
