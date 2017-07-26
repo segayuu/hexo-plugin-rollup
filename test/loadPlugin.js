@@ -1,3 +1,5 @@
+"use strict";
+
 const { ok, throws, deepStrictEqual, strictEqual } = require("assert");
 const tester = require("../lib/loadplugin");
 const isCallable = require("is-callable");

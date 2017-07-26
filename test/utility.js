@@ -1,3 +1,5 @@
+"use strict";
+
 const { ok, equal, throws } = require("assert");
 const { join: joinFn } = require("path");
 const util = require("../lib/utility");

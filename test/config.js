@@ -1,3 +1,5 @@
+"use strict";
+
 const { ok, deepStrictEqual } = require("assert");
 const isCallable = require("is-callable");
 const isPromise = require("is-promise");
