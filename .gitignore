@@ -39,7 +39,5 @@ jspm_packages
 # Web/PHPStorm IDE setting directory
 .idea
 
-# ESLint config file
-.eslintrc.json
-
+# visual studio code setting directory
 .vscode
