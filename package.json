@@ -41,7 +41,7 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "lint": "eslint \"lib/**\"",
+    "lint": "eslint \"lib/**/**.js\"",
     "test": "ava"
   },
   "license": "MIT"
