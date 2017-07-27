@@ -1,11 +1,11 @@
 {
   "extends": [
-    "plugin:ava/recommended", "hexo"
+    "plugin:node/recommended", "plugin:ava/recommended", "hexo"
   ],
   "env": {
       "browser": false,
       "node": true,
       "es6": true
   },
-  "plugins": ["ava"]
+  "plugins": ["node", "ava"]
 }
