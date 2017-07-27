@@ -1,134 +1,131 @@
 "use strict";
 
-const { ok, throws, deepStrictEqual, strictEqual } = require("assert");
-const tester = require("../lib/loadplugin");
+const { test } = require("ava");
 const isCallable = require("is-callable");
+const isString = require("is-string");
 
-describe('loadplugin', () => {
-  const plugin_plefix = "rollup-plugin-";
-  const validPluginName = "memory";
-  const invalidPluginName = "hogemoge";
-  describe('resolveArray', () => {
-    const func = tester.resolveArray;
-    it('関数である', () => {
-      ok(isCallable(func));
-    });
-    it('正常系', () => {
-      const func = tester.resolveArray;
-      const input = ["a", "b", "c"];
-      const result = func(input);
-      deepStrictEqual(result, [{
-        "name": "a",
-        "config": {}
-      },
-      {
-        "name": "b",
-        "config": {}
-      },{
-        "name": "c",
-        "config": {}
-      }]);
-    });
-    it('空のとき', () => {
-      const input = [];
-      const result = func(input);
-      deepStrictEqual(result, []);
-    });
-    it('数値のとき', () => {
-      throws(() => {
-        func(1);
-      }, TypeError);
-    });
-    it('nullのとき', () => {
-      throws(() => {
-        func(null);
-      }, TypeError);
-    });
-  });
-  describe('tryLoad', () => {
-    const func = tester.tryLoad;
-    it('関数かどうか', () => {
-      ok(isCallable(func));
-    });
-    describe('正常系', () => {
-      it('prefixなし', () => {
-        tester.clearTryLoadErrors();
-        const result = func(validPluginName);
-        ok(isCallable(result));
-        strictEqual(tester.tryLoadErrors.length, 0);
-      });
-      it('prefixあり', () => {
-        tester.clearTryLoadErrors();
-        const result = func(plugin_plefix + validPluginName);
-        ok(isCallable(result));
-        strictEqual(tester.tryLoadErrors.length, 0);
-      });
-    });
-    describe('見つからないとき', () => {
-      it('prefixなし', () => {
-        tester.clearTryLoadErrors();
-        const result = func(invalidPluginName);
-        strictEqual(result, false);
-        strictEqual(tester.tryLoadErrors.length, 1);
-      });
-      it('prefixあり', () => {
-        tester.clearTryLoadErrors();
-        const result = func(plugin_plefix + invalidPluginName);
-        strictEqual(result, false);
-        strictEqual(tester.tryLoadErrors.length, 1);
-      });
-    });
-    it('引数がstringじゃない', () => {
-      throws(() => {
-        func();
-      }, TypeError);
-      throws(() => {
-        func(1);
-      }, TypeError);
-      throws(() => {
-        func({});
-      }, TypeError);
-    });
-  });
-  describe('load', () => {
-    const func = tester.load;
-    it('関数かどうか', () => {
-      ok(isCallable(func));
-    });
-    describe('正常系', () => {
-      it('prefixなし', () => {
-        const result = func(validPluginName);
-        ok(isCallable(result));
-      });
-      it('prefixあり', () => {
-        const result = func(plugin_plefix + validPluginName);
-        ok(isCallable(result));
-      });
-    });
-    describe('見つからないとき', () => {
-      it('prefixなし', () => {
-        throws(() => {
-          func(invalidPluginName);
-        }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
-        );
-      });
-      it('prefixあり', () => {
-        throws(() => {
-          func(plugin_plefix + invalidPluginName);
-        }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND")
-        );
-      });
-    });
-    it('引数がstringじゃない', () => {
-      throws(() => {
-        func();
-      }, TypeError);
-      throws(() => {
-        func(1);
-      }, TypeError);
-      throws(() => {
-        func({});
-      }, TypeError);
-    });
-  });
+const tester = require("../lib/loadplugin");
+
+const plugin_plefix = "rollup-plugin-";
+const validPluginName = "memory";
+const invalidPluginName = "hogemoge";
+
+test.before("resolveArray is function", t => {
+  t.true(isCallable(tester.resolveArray));
+});
+
+test("resolveArray 正常系", t => {
+  const func = tester.resolveArray;
+  const input = ["a", "b", "c"];
+  const result = func(input);
+  const expected = [{
+    "name": "a",
+    "config": {}
+  },
+  {
+    "name": "b",
+    "config": {}
+  }, {
+    "name": "c",
+    "config": {}
+  }];
+  t.deepEqual(result, expected);
+});
+
+test("resolveArray 引数が空の配列のときは空を返す", t => {
+  const func = tester.resolveArray;
+  const input = [];
+  const result = func(input);
+  const expected = [];
+  t.deepEqual(result, expected);
+});
+
+test("resolveArray 引数が配列以外のときはTypeErrorをthrowする", t => {
+  const func = tester.resolveArray;
+  t.throws(() => { func(1); }, TypeError);
+  t.throws(() => { func(null); }, TypeError);
+});
+
+test.before("tryLoad is function", t => {
+  const func = tester.tryLoad;
+  t.true(isCallable(func));
+});
+
+test.before("load is function", t => {
+  const func = tester.load;
+  t.true(isCallable(func));
+});
+
+test.beforeEach("call clearTryLoadErrors", t => {
+  tester.clearTryLoadErrors();
+});
+
+test("tryLoad 正常系 prefixなし", t => {
+  const func = tester.tryLoad;
+  const result = func(validPluginName);
+  t.true(isCallable(result));
+  t.deepEqual(tester.tryLoadErrors, []);
+});
+
+test("tryLoad 正常系 prefixあり", t => {
+  const func = tester.tryLoad;
+  const result = func(plugin_plefix + validPluginName);
+  t.true(isCallable(result));
+  t.deepEqual(tester.tryLoadErrors, []);
+});
+
+test("tryLoad 見つからないとき prefixなし", t => {
+  const func = tester.tryLoad;
+  const result = func(invalidPluginName);
+  t.false(result);
+  t.deepEqual(tester.tryLoadErrors.length, 1);
+  t.true(isString(tester.tryLoadErrors[0]));
+});
+
+test("tryLoad 見つからないとき prefixあり", t => {
+  const func = tester.tryLoad;
+  const result = func(plugin_plefix + invalidPluginName);
+  t.false(result);
+  t.deepEqual(tester.tryLoadErrors.length, 1);
+  t.true(isString(tester.tryLoadErrors[0]));
+});
+
+test("tryLoad 引数がstringじゃない", t => {
+  const func = tester.tryLoad;
+  t.throws(() => { func(); }, TypeError);
+  t.throws(() => { func(1); }, TypeError);
+  t.throws(() => { func({}); }, TypeError);
+});
+
+test("load 正常系 prefixなし", t => {
+  const func = tester.load;
+  const result = func(validPluginName);
+  t.true(isCallable(result));
+});
+
+test("load 正常系 prefixあり", t => {
+  const func = tester.load;
+  const result = func(plugin_plefix + validPluginName);
+  t.true(isCallable(result));
+});
+
+test("load 見つからないとき prefixなし", t => {
+  const func = tester.load;
+  t.throws(() => {
+    func(invalidPluginName);
+  }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND"));
+});
+
+test("load 見つからないとき prefixあり", t => {
+  const func = tester.load;
+  t.throws(() => {
+    func(plugin_plefix + invalidPluginName);
+  }, err => (err instanceof Error && err.code === "MODULE_NOT_FOUND"));
+});
+
+test("load 引数がstringじゃない", t => {
+  const func = tester.load;
+  t.throws(() => { func(); }, TypeError);
+  t.throws(() => { func(1); }, TypeError);
+  t.throws(() => { func({}); }, TypeError);
 });
