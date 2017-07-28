@@ -47,13 +47,11 @@ test("resolveArray 引数が配列以外のときはTypeErrorをthrowする", t 
 });
 
 test.before("tryLoad is function", t => {
-  const func = tester.tryLoad;
-  t.true(isCallable(func));
+  t.true(isCallable(tester.tryLoad));
 });
 
 test.before("load is function", t => {
-  const func = tester.load;
-  t.true(isCallable(func));
+  t.true(isCallable(tester.load));
 });
 
 test.beforeEach("call clearTryLoadErrors", t => {
