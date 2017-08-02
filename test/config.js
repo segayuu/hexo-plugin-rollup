@@ -3,11 +3,16 @@ const isPlainObject = require("is-plain-object");
 
 const { test } = require("ava");
 
-const validPath = require("path").join(__dirname, "source", "js", "index.js");
+const { dirname, join } = require("path");
+const Hexo = require("hexo");
+const validPath = join(dirname(__dirname), "source", "js", "index.js");
+
+let hexo;
+let configObj;
+let load;
 
 test.before(async t => {
-  const cwd = process.cwd();
-  const hexo = new (require("hexo"))(cwd, { silent: true });
+  hexo = new Hexo(process.cwd(), { silent: true });
 
   const initTask = hexo.init();
   await initTask;
@@ -16,54 +21,50 @@ test.before(async t => {
   //
   const loadTask = hexo.load();
   await loadTask;
-  t.context.hexo = hexo;
-  t.context.configObj = require("../lib/config")(hexo);
-  t.context.load = require("../lib/site").wrap(hexo).loadConfig;
+
+  configObj = require("../lib/config")(hexo);
+  load = require("../lib/site").wrap(hexo).loadConfig;
 });
 
 test.beforeEach(t => {
-  t.context.hexo.config.rollup = {};
+  hexo.config.rollup = {};
 });
 
 test("entry undefined", t => {
-  const ctx = t.context;
-  const { config } = ctx.load();
+  const { config } = load();
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, []);
-  t.false(ctx.configObj.isEntry(validPath));
+  t.false(configObj.isEntry(validPath));
 });
 
 test("entry string", t => {
-  const ctx = t.context;
-  ctx.hexo.config.rollup.entry = "index.js";
-  const { config } = ctx.load();
+  hexo.config.rollup.entry = "index.js";
+  const { config } = load();
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, [validPath]);
-  t.true(ctx.configObj.isEntry(validPath));
+  t.true(configObj.isEntry(validPath));
 });
 
 test("entry array", t => {
-  const ctx = t.context;
-  ctx.hexo.config.rollup.entry = ["index.js"];
-  const { config } = ctx.load();
+  hexo.config.rollup.entry = ["index.js"];
+  const { config } = load();
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, [validPath]);
-  t.true(ctx.configObj.isEntry(validPath));
+  t.true(configObj.isEntry(validPath));
 });
 
 test("entry empty", t => {
-  const ctx = t.context;
-  ctx.hexo.config.rollup.entry = null;
-  const { config } = ctx.load();
+  hexo.config.rollup.entry = null;
+  const { config } = load();
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, []);
-  t.false(ctx.configObj.isEntry(validPath));
+  t.false(configObj.isEntry(validPath));
 });
