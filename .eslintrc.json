@@ -2,11 +2,8 @@
   "extends": [
     "plugin:node/recommended", "plugin:ava/recommended", "hexo"
   ],
-  "env": {
-      "browser": false
+  "rules": {
+    "ava/use-test": 0
   },
-    "rules": {
-      "ava/use-test": 0
-    },
   "plugins": ["node", "ava"]
 }
