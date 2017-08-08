@@ -3,7 +3,10 @@
     "plugin:node/recommended", "plugin:ava/recommended", "hexo"
   ],
   "rules": {
-    "ava/use-test": 0
+    "ava/use-test": 0,
+    "no-whitespace-before-property": 2,
+    "unicode-bom": 2,
+    "linebreak-style": [2, "unix"]
   },
   "plugins": ["node", "ava"]
 }
