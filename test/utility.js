@@ -2,10 +2,7 @@
 
 const { join: joinFn } = require("path");
 const { test } = require("ava");
-const isPlainObject = require("is-plain-object");
-const isString = require("is-string");
-const isCallable = require("is-callable");
-
+const { isFunction: isCallable, isPlainObject, isString } = require("lodash");
 const util = require("../lib/utility");
 
 test.before("all_join is function", t => {

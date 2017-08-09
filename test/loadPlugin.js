@@ -1,8 +1,7 @@
 "use strict";
 
 const { test } = require("ava");
-const isCallable = require("is-callable");
-const isString = require("is-string");
+const { isFunction: isCallable, isString } = require("lodash");
 
 const tester = require("../lib/loadplugin");
 

@@ -1,5 +1,5 @@
 "use strict";
-const isPlainObject = require("is-plain-object");
+const { isPlainObject } = require("lodash");
 
 const { test } = require("ava");
 
