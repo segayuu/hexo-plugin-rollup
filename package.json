@@ -10,7 +10,6 @@
     "url": "https://github.com/segayuu/hexo-plugin-rollup"
   },
   "dependencies": {
-    "blacklist": "^1.1.4",
     "bluebird": "^3.5.0",
     "lodash": "^4.17.4",
     "rollup": "^0.45.2",

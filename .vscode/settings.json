@@ -4,5 +4,6 @@
         "configFile": "./.eslintrc.json"
     },
     "files.eol": "\n",
-    "editor.tabSize": 2
-  }
+    "editor.tabSize": 2,
+    "npm-intellisense.packageSubfoldersIntellisense": true
+}
