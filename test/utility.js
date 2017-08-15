@@ -29,7 +29,7 @@ test("all_join 正常系", t => {
 test("all_join throws TypeError", t => {
   const func = util.all_join;
   const input1 = "es";
-  const input2 = null;
+  const input2 = 1;
   t.throws(() => { func(input1, input2); }, TypeError);
 });
 
