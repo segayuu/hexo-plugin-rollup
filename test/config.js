@@ -23,7 +23,7 @@ test.before(async t => {
   await loadTask;
 
   configObj = require("../lib/config")(hexo);
-  load = require("../lib/site").wrap(hexo).loadConfig;
+  load = () => require("../lib/site").loadConfig(hexo);
 });
 
 test.beforeEach(t => {
