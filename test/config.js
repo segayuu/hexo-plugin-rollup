@@ -22,8 +22,10 @@ test.before(async t => {
   const loadTask = hexo.load();
   await loadTask;
 
+  t.true(hexo.env.init);
+
   configObj = require("../lib/config")(hexo);
-  load = require("../lib/site").wrap(hexo).loadConfig;
+  load = () => require("../lib/site").loadConfig(hexo);
 });
 
 test.beforeEach(t => {

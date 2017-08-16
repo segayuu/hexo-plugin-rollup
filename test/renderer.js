@@ -6,19 +6,21 @@ const { test } = require("ava");
 let hexo;
 let render;
 
-test.before(async () => {
+test.before(async t => {
   hexo = new Hexo(process.cwd(), { silent: true });
-  render = renderer(hexo);
-  
   hexo.config.rollup = {};
 
   const initTask = hexo.init();
   await initTask;
 
+  t.true(hexo.env.init);
+
   //call load() only initTask after.
   //
   const loadTask = hexo.load();
   await loadTask;
+
+  render = renderer(hexo);
 });
 
 test.beforeEach(t => {
