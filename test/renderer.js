@@ -9,7 +9,7 @@ let render;
 test.before(async () => {
   hexo = new Hexo(process.cwd(), { silent: true });
   render = renderer(hexo);
-  
+
   hexo.config.rollup = {};
 
   const initTask = hexo.init();
