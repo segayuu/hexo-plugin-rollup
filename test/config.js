@@ -7,13 +7,13 @@ const { dirname, join } = require("path");
 const Hexo = require("hexo");
 const validPath = join(dirname(__dirname), "source", "js", "index.js");
 
-let hexo;
-let configObj;
-let load;
+const createSiteConfig = require("../lib/site").loadConfig;
+
+const hexo = new Hexo(process.cwd(), { silent: true });
+const createConfigObject = () => require("../lib/config")(hexo);
+const load = () => createSiteConfig(hexo);
 
 test.before(async t => {
-  hexo = new Hexo(process.cwd(), { silent: true });
-
   const initTask = hexo.init();
   await initTask;
 
@@ -23,9 +23,6 @@ test.before(async t => {
   await loadTask;
 
   t.true(hexo.env.init);
-
-  configObj = require("../lib/config")(hexo);
-  load = () => require("../lib/site").loadConfig(hexo);
 });
 
 test.beforeEach(t => {
@@ -34,6 +31,8 @@ test.beforeEach(t => {
 
 test("entry undefined", t => {
   const { config } = load();
+  const configObj = createConfigObject();
+
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
@@ -43,27 +42,37 @@ test("entry undefined", t => {
 
 test("entry string", t => {
   hexo.config.rollup.entry = "index.js";
+
   const { config } = load();
+  const configObj = createConfigObject();
+
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, [validPath]);
+  t.true(configObj.isSite(validPath));
   t.true(configObj.isEntry(validPath));
 });
 
 test("entry array", t => {
   hexo.config.rollup.entry = ["index.js"];
+
   const { config } = load();
+  const configObj = createConfigObject();
+
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
   t.deepEqual(entry, [validPath]);
+  t.true(configObj.isSite(validPath));
   t.true(configObj.isEntry(validPath));
 });
 
 test("entry empty", t => {
   hexo.config.rollup.entry = null;
   const { config } = load();
+  const configObj = createConfigObject();
+
   t.true(isPlainObject(config));
   const { entry } = config;
   t.true(Array.isArray(entry), `entry typeof ${typeof entry}`);
