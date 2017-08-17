@@ -7,11 +7,16 @@ const { dirname, join } = require("path");
 const Hexo = require("hexo");
 const validPath = join(dirname(__dirname), "source", "js", "index.js");
 
-const createSiteConfig = require("../lib/site").loadConfig;
-
 const hexo = new Hexo(process.cwd(), { silent: true });
-const createConfigObject = () => require("../lib/config")(hexo);
+const createConfigObject = require("../lib/config");
+const getConfigObject = () => createConfigObject(hexo);
+const createSiteConfig = require("../lib/site").loadConfig;
 const load = () => createSiteConfig(hexo);
+
+test.before(t => {
+  t.throws(getConfigObject, Error, "hexo object not init!");
+  t.throws(load, Error, "hexo object not init!");
+});
 
 test.before(async t => {
   const initTask = hexo.init();
@@ -22,7 +27,7 @@ test.before(async t => {
   const loadTask = hexo.load();
   await loadTask;
 
-  t.true(hexo.env.init);
+  t.true(hexo.env.init, "hexo object not init!");
 });
 
 test.beforeEach(t => {
@@ -31,7 +36,7 @@ test.beforeEach(t => {
 
 test("entry undefined", t => {
   const { config } = load();
-  const configObj = createConfigObject();
+  const configObj = getConfigObject();
 
   t.true(isPlainObject(config));
   const { entry } = config;
@@ -44,7 +49,7 @@ test("entry string", t => {
   hexo.config.rollup.entry = "index.js";
 
   const { config } = load();
-  const configObj = createConfigObject();
+  const configObj = getConfigObject();
 
   t.true(isPlainObject(config));
   const { entry } = config;
@@ -58,7 +63,7 @@ test("entry array", t => {
   hexo.config.rollup.entry = ["index.js"];
 
   const { config } = load();
-  const configObj = createConfigObject();
+  const configObj = getConfigObject();
 
   t.true(isPlainObject(config));
   const { entry } = config;
@@ -71,7 +76,7 @@ test("entry array", t => {
 test("entry empty", t => {
   hexo.config.rollup.entry = null;
   const { config } = load();
-  const configObj = createConfigObject();
+  const configObj = getConfigObject();
 
   t.true(isPlainObject(config));
   const { entry } = config;
