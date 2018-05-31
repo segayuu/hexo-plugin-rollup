@@ -25,14 +25,14 @@
     "eslint": "^4.19.1",
     "eslint-config-hexo": "^3.0.0",
     "eslint-plugin-ava": "^4.2.1",
-    "hexo": "^3.3.8",
+    "hexo": "^3.7.1",
     "is-promise": "^2.1.0"
   },
   "peerDependencies": {
     "hexo": "3"
   },
   "hexo": {
-    "version": "3.3.8"
+    "version": "3.7.1"
   },
   "engines": {
     "node": ">=8.0.0"
