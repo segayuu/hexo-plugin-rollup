@@ -1333,9 +1333,9 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.4, escape-string-regexp@^
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
-"eslint-config-hexo@git+https://github.com/segayuu/eslint-config-hexo.git":
+eslint-config-hexo@^3.0.0:
   version "3.0.0"
-  resolved "git+https://github.com/segayuu/eslint-config-hexo.git#4ba6fb51bf7ce68544da5f414024c47742cf1de0"
+  resolved "https://registry.yarnpkg.com/eslint-config-hexo/-/eslint-config-hexo-3.0.0.tgz#60c6355eea28cc862dbe7000b802eb5d42afee53"
   dependencies:
     eslint-plugin-node "^5.2.1"
 
@@ -1352,7 +1352,7 @@ eslint-plugin-ava@^4.2.1:
     multimatch "^2.1.0"
     pkg-up "^2.0.0"
 
-eslint-plugin-node@^5.1.1, eslint-plugin-node@^5.2.1:
+eslint-plugin-node@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-5.2.1.tgz#80df3253c4d7901045ec87fa660a284e32bdca29"
   dependencies:
